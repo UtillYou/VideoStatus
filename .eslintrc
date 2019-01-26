@@ -1,0 +1,11 @@
+{
+  "extends": "think",
+  "rules": {
+    "eqeqeq":"off"
+  },
+  "globals": {
+    "jQuery": true,
+    "document": true,
+    "window":true
+  }
+}

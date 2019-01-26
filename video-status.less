@@ -1,0 +1,100 @@
+.video-status{
+    position: relative;
+    font-size: 12px;
+    color: #5D5F63;
+    overflow-y: auto;
+    overflow-x:hidden;
+    box-sizing: content-box;
+    overflow-y:auto;
+    & *{box-sizing: border-box};
+    .left{
+        width:140px;
+        position:absolute;
+        left:0px;
+        top:0px;
+        bottom:0px;
+        .day{
+            height: 21px;
+            text-align: center;
+
+            line-height: 21px;
+        }
+        .title,.channel-title{
+            background-color: #eeeeee;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            border-right: 1px solid #878788;
+            border-bottom: 1px solid #878788;
+        }
+    }
+    .right{
+        margin-left:140px;
+        height: 100%;
+        .thumb-container{
+            height: 21px;
+            position: relative;
+            .thumb{
+              position: absolute;
+              width: 64px;
+              background-color: red;
+              left: -32px;
+              bottom: 0px;
+              z-index: 99;
+              font-size: 12px;
+              color: #fff;
+              padding: 2px 4px;
+              opacity: 0.78;
+              cursor: ew-resize;
+              .line{
+                width:2px;
+                position: absolute;
+                background-color: red;
+                top:20px;
+                left:32px;
+              }
+            }
+        }
+        .ruler{
+            background-color: #eeeeee;
+            border-bottom: 1px solid #878788;
+            height: 30px;
+            position: relative;
+            .section{
+              padding-left: 3px;
+              font-size: 12px;
+              line-height: 8px;
+              height: 20px;
+              box-sizing: border-box;
+              border-right: 1px solid #878788;
+              position: absolute;
+              bottom: 0px;
+              &:last-child{
+                border-right: none;
+              }
+              .section-half{
+                height: 8px;
+                position: absolute;
+                bottom: 0px;
+                left: 0px;
+                width:50%;
+                border-right: 1px solid #878788;
+                box-sizing: border-box;
+              }
+            }
+
+        }
+        .channel{
+            border-bottom: 1px solid #878788;
+            height: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        .green{
+            height: 100%;
+            background-color: #c4eca9;
+            position: absolute;
+            top:0px;
+        }
+    }
+}

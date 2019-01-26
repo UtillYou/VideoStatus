@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet/less" type="text/css" href="video-status.less" />
+  <style>
+    #info p {
+      margin:2px 0px;
+    }
+    hr{
+      border: none;
+      width:100%;
+      height: 1px;
+      background-color: #ddd;
+    }
+    label{
+      cursor: pointer;
+    }
+  </style>
+  <script src="./less.min.js"></script>
+</head>
+<body>
+  <div id="container" style="width:1500px;height:300px;border:1px solid red" class="video-status">
+    <div class="left">
+      <div class="day">2018-04-26</div>
+      <div class="title">小时</div>
+      <div class="channel-title-container">
+        
+      </div>
+    </div>
+    <div class="right">
+      <div class="thumb-container">
+        <div class="thumb">
+        <span class="h">00:</span>
+        <span class="m">00:</span>
+        <span class="s">00</span>
+        <div class="line">
+
+        </div>
+      </div>
+    </div>
+      <div class="ruler">
+        <div class="section"><div class="section-half"></div></div>
+      </div>
+      <div class="channel-container">
+      </div>
+    </div>
+  </div>
+<br>
+<hr>
+<br>
+<div style="width:100%;overflow: hidden;">
+  <div style="width:60%;float: left;">
+    <label for="watchDrag">
+      <input type="checkbox" id="watchDrag" checked>
+      监视拖拽
+    </label>
+    <label for="watchScale">
+      <input type="checkbox" id="watchScale" checked>
+      监视缩放
+    </label>
+    <label for="watchPlaying">
+      <input type="checkbox" id="watchPlaying" checked>
+      监视播放
+    </label>
+    <label for="watchClick">
+      <input type="checkbox" id="watchClick" checked>
+      监视点击
+    </label>
+    <hr>
+      <button onclick="clearInfo()">清空日志</button>
+
+      <div style="height:300px;font-size: 12px;line-height: 14px;overflow-y: auto;border:1px solid green;margin-top: 10px" id="info">
+    
+      </div>
+  </div>
+  <div style="width:40%;float: left;padding: 20px;box-sizing: border-box">
+    <label for="">时间：</label> <input type="text" name="" value="00:00:00" id="time"><button type="button" name="button" onclick="updatePosition()">更新位置</button>
+    <br>
+    <label for="">通道号：</label> <input type="text" name="" value="1,3,5" id="channels"><button type="button" name="button" onclick="updateChannel()">修改</button>
+    <br>
+    速度：
+    <label for="speed18"><input type="radio" id="speed18" name="speed" value="0.125" checked>X1/8</label>
+    <label for="speed14"><input type="radio" id="speed14" name="speed" value="0.25" checked>X1/4</label>
+    <label for="speed12"><input type="radio" id="speed12" name="speed" value="0.5" checked>X1/2</label>
+    <label for="speed1"><input type="radio" id="speed1" name="speed" value="1" checked>X1</label>
+    <label for="speed2"><input type="radio" id="speed2" name="speed" value="2">X2</label>
+    <label for="speed4"><input type="radio" id="speed4" name="speed" value="4">X4</label>
+    <label for="speed8"><input type="radio" id="speed8" name="speed" value="8">X8</label>
+    <label for="speed16"><input type="radio" id="speed16" name="speed" value="16">X16</label>
+    <br><br>
+    <button onclick="demo.play()">开始播放</button>
+    <button onclick="demo.stop()">停止播放</button>
+    <button onclick="demo.pause()">暂停播放</button>
+    <button onclick="demo.continue()">继续播放</button>
+    <button onclick="demo.setDirection('forward')">向前播放</button>
+    <button onclick="demo.setDirection('backward')">向后播放</button>
+  </div>
+</div>
+<div style="clear: both;"></div>
+  <script src="./jquery-1.11.3.min.js"></script>
+  <script src="./video-status.js"></script>
+  <script type="text/javascript">
+  var demo = null;
+  var $info = $('#info');
+  setTimeout(function () {
+    demo = $('#container').videoStatus({
+      onDrag:function($this,state){
+        if ($('#watchDrag').prop('checked')) {
+          $info.append($('<p>').html('拖拽；state:'+JSON.stringify(state)));
+        }
+      },
+      onDragStart:function($this,state){
+        if ($('#watchDrag').prop('checked')) {
+          $info.append($('<p>').html('拖拽 开始；state:'+JSON.stringify(state)));
+        }
+      },
+      onDragEnd:function($this,state){
+        if ($('#watchDrag').prop('checked')) {
+          $info.append($('<p>').html('拖拽 结束；state:'+JSON.stringify(state)));
+        }
+      },
+      onPlaying:function($this,state){
+        if ($('#watchPlaying').prop('checked')) {
+          $info.append($('<p>').html('持续播放；state:'+JSON.stringify(state)));
+        }
+      },
+      onStart:function($this,state){
+        if ($('#watchPlaying').prop('checked')) {
+          $info.append($('<p>').html('开始播放；state:'+JSON.stringify(state)));
+        }
+      },
+      onPause:function($this,state){
+        if ($('#watchPlaying').prop('checked')) {
+          $info.append($('<p>').html('暂停播放；state:'+JSON.stringify(state)));
+        }
+      },
+      onContinue:function($this,state){
+        if ($('#watchPlaying').prop('checked')) {
+          $info.append($('<p>').html('继续播放；state:'+JSON.stringify(state)));
+        }
+      },
+      onStop:function($this,state){
+        if ($('#watchPlaying').prop('checked')) {
+          $info.append($('<p>').html('结束播放；state:'+JSON.stringify(state)));
+        }
+      },
+      onScale:function($this,state){
+        if ($('#watchScale').prop('checked')) {
+          $info.append($('<p>').html('缩放事件；state:'+JSON.stringify(state)));
+        }
+      },
+      onStatusClick:function($this,state){
+        if ($('#watchClick').prop('checked')) {
+          $info.append($('<p>').html('点击事件；state:'+JSON.stringify(state)));
+        }
+      },
+      channels:[1,3,5],
+      channelData:{"1":[
+        {"ID":1,"DisplayText":"","StationId":1,"StartTime":"2018-06-10 10:00:00","EndTime":"2018-06-10 11:36:00"},
+        {"ID":2,"DisplayText":"","StationId":1,"StartTime":"2018-06-10 15:00:00","EndTime":"2018-06-10 15:37:23"},
+        ],
+        "5":[
+        {"ID":3,"DisplayText":"","StationId":5,"StartTime":"2018-06-10 5:55:55","EndTime":"2018-06-10 09:36:30"},
+        {"ID":4,"DisplayText":"","StationId":5,"StartTime":"2018-06-10 20:00:00","EndTime":"2018-06-10 22:37:23"},
+        ]}
+    });
+    console.log(demo);
+    demo.test();
+  }, 1000);
+  
+  function updateChannel(){
+    var channels = $('#channels').val();
+    demo.setChannels(channels);
+  }
+  function updatePosition(){
+    var time = $('#time').val();
+    demo.setCurrentTime(time);
+  }
+  function clearInfo() {
+    $info.empty();
+  }
+  $('input:radio').on('change',function(){
+    var  val = $('input:radio[name="speed"]:checked').val();
+    demo.setSpeed(parseFloat(val))    
+  })
+  </script>
+</body>
+</html>
