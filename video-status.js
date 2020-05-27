@@ -147,8 +147,7 @@
       self.updateIntervalText();
       self.onScale();
     });
-    // 绑定指示器拖拽事件
-    $this.find('.thumb').bind('mousedown', function(event) {
+    var handleMouseDown = function(event) {
       /* 获取需要拖动节点的坐标 */
       var prevLeft = parseInt($(this).css('left'));
       /* 获取当前鼠标的坐标 */
@@ -160,7 +159,7 @@
       self.onDragStart();
       /* 绑定拖动事件 */
       /* 由于拖动时，可能鼠标会移出元素，所以应该使用全局（document）元素 */
-      $(document).bind('mousemove', function(ev) {
+      $(document).on('mousemove', function(ev) {
         if (state.isThumbMoving) {
           ev.preventDefault();
           /* 计算鼠标移动了的位置 */
@@ -179,17 +178,19 @@
           self.onDrag();
         }
       });
-    });
-    $(document).bind('mouseup', function(event) {
+    };
+    var handleMouseUp = function(event) {
       if (state.isThumbMoving) {
-        $(document).unbind('mousemove');
+        $(document).off('mousemove');
         state.isThumbMoving = false;
         self.onDragEnd();
       }
-    });
+    };
+    // 绑定指示器拖拽事件
+    $this.find('.thumb').off('mousedown').on('mousedown', handleMouseDown);
+    $(document).off('mouseup').on('mouseup', handleMouseUp);
 
-    // 绑定通道区域点击事件
-    $this.find('.channel-container').bind('click', function(e) {
+    var handleClick = function(e) {
       var thumb = $this.find('.thumb');
       var containerOffsetX = $this.offset().left;
       var newThumbLeft = e.pageX - (options.channelTitleWidth + containerOffsetX) - (options.thumbWidth / 2);
@@ -199,7 +200,9 @@
       });
       self.updateThumbTime();
       self.onStatusClick();
-    });
+    };
+    // 绑定通道区域点击事件
+    $this.find('.channel-container').off('click').on('click', handleClick);
   };
 
   /**
@@ -634,8 +637,10 @@
     /**
      * 将日期字符串解析成时分秒的对象
      * 还有时分秒累计的总秒数
+     * 火狐，Safari不支持 yyyy-mm-dd 格式，只支持 yyyy/mm/dd
      */
     parseDate2HMS: function(dateStr) {
+      dateStr = dateStr.replace(/-/g, '/');
       var date = new Date(dateStr);
       var hour = date.getHours();
       var minute = date.getMinutes();
